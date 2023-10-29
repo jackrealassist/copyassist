@@ -3,7 +3,7 @@ import { SendOutlined } from '@ant-design/icons';
 
 const Leftbar = () => {
   return (
-    <div className='leftbar flex flex-col gap-32 flex-3 p-5'>
+    <div className='leftbar flex flex-col bg-white gap-32 flex-3 p-5'>
     <div className='flex items-center justify-center'>
       <img src='https://assets-global.website-files.com/652734407bac4b958e9aee3c/652749ab9b047e909c9fda96_realassistlogo.svg' alt='Main Logo'/>
     </div>

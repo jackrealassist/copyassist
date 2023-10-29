@@ -108,8 +108,8 @@ const Generate = () => {
   }, []);
 
   return (
-    <div className="flex px-2 py-8 pb-32 overflow-x-hidden relative h-screen flex-row justify-center gap-6">
-      <div className="max-w-3xl overflow-y-scroll no-scrollbar">
+    <div className="flex px-2 py-8 bg-gray-100 pb-32 overflow-x-hidden relative h-screen flex-row justify-center gap-6">
+      <div className="max-w-3xl border border-grey-200 bg-white overflow-y-scroll rounded-3xl no-scrollbar">
         {messages.length == 0 ? (
           <div>Loading</div>
         ) : (
@@ -119,9 +119,9 @@ const Generate = () => {
               messages.map((message, index) => {
                 return (
                   <div key={index}>
-                    <div className="flex my-4 flex-row justify-start">
+                    <div className="flex flex-row justify-start">
                       <div
-                        className={`w-full flex ${
+                        className={`w-full flex m-4 ${
                           message.role === "user"
                             ? "justify-end"
                             : "justify-start"
@@ -131,20 +131,27 @@ const Generate = () => {
                           className={`${
                             message.role === "user"
                               ? "bg-blue-700 text-white "
-                              : "bg-gray-100 text-gray-800"
-                          } rounded-xl relative`}
+                              : "bg-white text-gray-800"
+                          } border border-grey-200 rounded-xl relative`}
                         >
                           <div className="flex justify-between relative items-center">
                             <p
+                              style={{ whiteSpace: "pre-line" }}
                               contentEditable={message.role === "assistant"}
-                              className=" m-1 p-5"
+                              className={`m-1 outline-none  ${
+                                message.role === "assistant" ? "p-5" : "p-2"
+                              }`}
                             >
                               {message.content}
                             </p>
                             {message.role === "assistant" && (
-                              <button onClick={() => {
-                                navigator.clipboard.writeText(message.content);
-                              }}>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    message.content
+                                  );
+                                }}
+                              >
                                 <div className="absolute opacity-40 hover:opacity-100 top-1.5 right-1.5 bg-white hover:cursor-pointer rounded-lg ">
                                   <CopyIcon />
                                 </div>
@@ -159,15 +166,17 @@ const Generate = () => {
               })}
             <div className="absolute w-full bottom-2 ">
               <div className="max-w-3xl">
-                <div className="buttons_desc p-2 flex overflow-x-scroll no-scrollbar w-full gap-4">
+                <div className="buttons_desc p-2 pl-0 flex overflow-x-scroll no-scrollbar w-full gap-4">
                   <button
                     onClick={() => sendReply("Make it longer.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-1 px-6 rounded-xl"
+                    class=" w-fit h-[42px] bg-gray-300 text-black hover:bg-slate-400 overflow-hidden py-1 px-6 rounded-xl"
                   >
                     Make it longer
                   </button>
                   <button
-                    onClick={() => sendReply("Make it shorter.")}
+                    onClick={() =>
+                      sendReply("Make it shorter not more than 250.")
+                    }
                     class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
                   >
                     Make it shorter
@@ -178,11 +187,41 @@ const Generate = () => {
                   >
                     Write in spanish
                   </button>
+                  <button
+                    onClick={() => sendReply("Write in spanish.")}
+                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                  >
+                    Write in spanish
+                  </button>
+                  <button
+                    onClick={() => sendReply("Write in spanish.")}
+                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                  >
+                    Write in spanish
+                  </button>
+                  <button
+                    onClick={() => sendReply("Write in spanish.")}
+                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                  >
+                    Write in spanish
+                  </button>
+                  <button
+                    onClick={() => sendReply("Write in spanish.")}
+                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                  >
+                    Write in spanish
+                  </button>
+                  <button
+                    onClick={() => sendReply("Write in spanish.")}
+                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                  >
+                    Write in spanish
+                  </button>
                 </div>
-                <div className="flex p-2 w-full items-center justify-center gap-2">
+                <div className="flex py-2 w-full items-center justify-center gap-2">
                   <input
                     type="text"
-                    className="block background_desc w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="block background_desc w-full py-2 px-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     placeholder="What can I assist you with"
                     value={replyBoxText}
                     onChange={(e) => setReplyBoxText(e.target.value)}
