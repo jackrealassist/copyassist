@@ -2,6 +2,15 @@ import React, { useEffect, useContext, useState } from "react";
 import { SendOutlined } from "@ant-design/icons";
 import { DataContext } from "../contexts/dataContext";
 import axios from "axios";
+import { Spin } from "antd";
+
+const Loading = () => {
+  return (
+    <div className="w-full h-1/3 flex justify-center items-center">
+      <Spin className="mt-5" size="large" spinning={true}></Spin>
+    </div>
+  );
+};
 
 const CopyIcon = () => {
   return (
@@ -108,141 +117,117 @@ const Generate = () => {
   }, []);
 
   return (
-    <div className="flex px-2 py-8 bg-gray-100 pb-32 overflow-x-hidden relative h-screen flex-row justify-center gap-6">
-      <div className="max-w-3xl border border-grey-200 bg-white overflow-y-scroll rounded-3xl no-scrollbar">
-        {messages.length == 0 ? (
-          <div>Loading</div>
-        ) : (
-          <div>
-            {" "}
-            {messages &&
-              messages.map((message, index) => {
-                return (
-                  <div key={index}>
-                    <div className="flex flex-row justify-start">
-                      <div
-                        className={`w-full flex m-4 ${
-                          message.role === "user"
-                            ? "justify-end"
-                            : "justify-start"
-                        }`}
-                      >
+    <>
+      {messages.length === 0 ? (
+        <div className="h-screen flex flex-row items-center bg-gray-100 ">
+          <Loading />
+        </div>
+      ) : (
+        <div
+          className={`flex px-2 py-8 bg-gray-100 pb-32 overflow-x-hidden relative h-screen flex-row justify-center gap-6`}
+        >
+          <div className="max-w-3xl border border-grey-200 bg-white overflow-y-scroll rounded-3xl no-scrollbar">
+            <div>
+              {" "}
+              {messages &&
+                messages.map((message, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="flex flex-row justify-start">
                         <div
-                          className={`${
+                          className={`w-full flex m-4 ${
                             message.role === "user"
-                              ? "bg-blue-700 text-white "
-                              : "bg-white text-gray-800"
-                          } border border-grey-200 rounded-xl relative`}
+                              ? "justify-end"
+                              : "justify-start"
+                          }`}
                         >
-                          <div className="flex justify-between relative items-center">
-                            <p
-                              style={{ whiteSpace: "pre-line" }}
-                              contentEditable={message.role === "assistant"}
-                              className={`m-1 outline-none  ${
-                                message.role === "assistant" ? "p-5" : "p-2"
-                              }`}
-                            >
-                              {message.content}
-                            </p>
-                            {message.role === "assistant" && (
-                              <button
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    message.content
-                                  );
-                                }}
+                          <div
+                            className={`${
+                              message.role === "user"
+                                ? "bg-blue-700 text-white "
+                                : "bg-white text-gray-800"
+                            } border border-grey-200 rounded-xl relative`}
+                          >
+                            <div className="flex justify-between relative items-center">
+                              <p
+                                style={{ whiteSpace: "pre-line" }}
+                                contentEditable={message.role === "assistant"}
+                                className={`m-1 outline-none  ${
+                                  message.role === "assistant" ? "p-5" : "p-2"
+                                }`}
                               >
-                                <div className="absolute opacity-40 hover:opacity-100 top-1.5 right-1.5 bg-white hover:cursor-pointer rounded-lg ">
-                                  <CopyIcon />
-                                </div>
-                              </button>
-                            )}
+                                {message.content}
+                              </p>
+                              {message.role === "assistant" && (
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      message.content
+                                    );
+                                  }}
+                                >
+                                  <div className="absolute opacity-40 hover:opacity-100 top-1.5 right-1.5 bg-white hover:cursor-pointer rounded-lg ">
+                                    <CopyIcon />
+                                  </div>
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  );
+                })}
+              <div className="absolute w-full bottom-2 ">
+                <div className="max-w-3xl">
+                  <div className="buttons_desc p-2 flex overflow-x-scroll no-scrollbar w-full gap-4">
+                    <button
+                      onClick={() => sendReply("Make it longer.")}
+                      class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-1 px-6 rounded-xl"
+                    >
+                      Make it longer
+                    </button>
+                    <button
+                      onClick={() =>
+                        sendReply("Make it shorter not more than 250.")
+                      }
+                      class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                    >
+                      Make it shorter
+                    </button>
+                    <button
+                      onClick={() => sendReply("Write in spanish.")}
+                      class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
+                    >
+                      Write in spanish
+                    </button>
                   </div>
-                );
-              })}
-            <div className="absolute w-full bottom-2 ">
-              <div className="max-w-3xl">
-                <div className="buttons_desc p-2 pl-0 flex overflow-x-scroll no-scrollbar w-full gap-4">
-                  <button
-                    onClick={() => sendReply("Make it longer.")}
-                    class=" w-fit h-[42px] bg-gray-300 text-black hover:bg-slate-400 overflow-hidden py-1 px-6 rounded-xl"
-                  >
-                    Make it longer
-                  </button>
-                  <button
-                    onClick={() =>
-                      sendReply("Make it shorter not more than 250.")
-                    }
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Make it shorter
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                  <button
-                    onClick={() => sendReply("Write in spanish.")}
-                    class=" w-fit bg-gray-300 text-black hover:bg-slate-400 py-2 px-6 rounded-xl"
-                  >
-                    Write in spanish
-                  </button>
-                </div>
-                <div className="flex py-2 w-full items-center justify-center gap-2">
-                  <input
-                    type="text"
-                    className="block background_desc w-full py-2 px-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    placeholder="What can I assist you with"
-                    value={replyBoxText}
-                    onChange={(e) => setReplyBoxText(e.target.value)}
-                  />
-                  <button onClick={() => sendReply()}>
-                    <SendOutlined
-                      style={{
-                        fontSize: "1rem",
-                        padding: "0.5rem",
-                        color: "white",
-                      }}
-                      className=" flex items-center justify-center font-bold bg-blue-700 rounded-full h-9 w-9"
+                  <div className="flex py-2 w-full items-center justify-center gap-2">
+                    <input
+                      type="text"
+                      className="block background_desc w-full py-2 px-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                      placeholder="What can I assist you with"
+                      value={replyBoxText}
+                      onChange={(e) => setReplyBoxText(e.target.value)}
                     />
-                  </button>
+                    <button onClick={() => sendReply()}>
+                      <SendOutlined
+                        style={{
+                          fontSize: "1rem",
+                          padding: "0.5rem",
+                          color: "white",
+                        }}
+                        className=" flex items-center justify-center font-bold bg-blue-700 rounded-full h-9 w-9"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
